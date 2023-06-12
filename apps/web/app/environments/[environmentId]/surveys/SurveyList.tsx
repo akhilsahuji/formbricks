@@ -14,7 +14,7 @@ import SurveyStatusIndicator from "@/components/shared/SurveyStatusIndicator";
 import { useEnvironment } from "@/lib/environments/environments";
 import { createSurvey, deleteSurvey, duplicateSurvey, useSurveys } from "@/lib/surveys/surveys";
 import { Badge, ErrorComponent } from "@formbricks/ui";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { ArrowUturnUpIcon, PlusIcon } from "@heroicons/react/24/outline";
 import {
   ComputerDesktopIcon,
   DocumentDuplicateIcon,
@@ -83,6 +83,10 @@ export default function SurveysList({ environmentId }) {
       toast.error("Failed to duplicate the survey.");
     }
   };
+  
+
+  
+  
 
   if (isLoadingSurveys) {
     return <LoadingSpinner />;
@@ -142,8 +146,8 @@ export default function SurveysList({ environmentId }) {
                       survey.type === "link"
                         ? "Link Survey"
                         : survey.type === "web"
-                        ? "In-Product Survey"
-                        : ""
+                          ? "In-Product Survey"
+                          : ""
                     }
                     type="gray"
                     size={"tiny"}
@@ -202,14 +206,18 @@ export default function SurveysList({ environmentId }) {
                               Duplicate
                             </button>
                           </DropdownMenuItem>
-                          {/* <DropdownMenuItem>
-                            <Link
+                          <DropdownMenuItem>
+                            <button
                               className="flex w-full items-center"
-                              href={`/environments/${environmentId}/surveys/${survey.id}/edit`}>
+                              onClick={() => {
+                                copySurveyToOtherEnvironment(activeSurvey.id);
+                              }}
+                            >
                               <ArrowUturnUpIcon className="mr-2 h-4 w-4" />
-                              Copy to Production
-                            </Link>
-                          </DropdownMenuItem> */}
+                              {environment?.type === "production" ? "Copy to Dev." : "Copy to Prod."}
+                            </button>
+                          </DropdownMenuItem>
+
                           <DropdownMenuItem>
                             <button
                               className="flex w-full  items-center"
