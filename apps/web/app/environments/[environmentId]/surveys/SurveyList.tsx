@@ -12,6 +12,7 @@ import {
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import SurveyStatusIndicator from "@/components/shared/SurveyStatusIndicator";
 import { useEnvironment } from "@/lib/environments/environments";
+import { changeEnvironment } from "@/lib/environments/changeEnvironments";
 import { createSurvey, deleteSurvey, duplicateSurvey, useSurveys } from "@/lib/surveys/surveys";
 import { Badge, ErrorComponent } from "@formbricks/ui";
 import { ArrowUturnUpIcon, PlusIcon } from "@heroicons/react/24/outline";
@@ -119,6 +120,27 @@ export default function SurveysList({ environmentId }) {
       </div>
     );
   }
+  
+  const copySurveyToOtherEnvironment = async (environmentType: "production" | "development") => {
+    try {
+      const newEnvironment = environment?.product.environments.find((e) => e.type === environmentType);
+      
+      if (newEnvironment) {
+        const newEnvironmentId = newEnvironment.id;
+        await duplicateSurvey(newEnvironmentId, activeSurveyIdx);
+    
+        toast.success("Survey copied successfully.");
+        mutateSurveys();
+        changeEnvironment(environmentType, environment, router);
+      } else {
+        throw new Error("Target environment not found.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to copy the survey.");
+    }
+  };
+  
 
   return (
     <>
