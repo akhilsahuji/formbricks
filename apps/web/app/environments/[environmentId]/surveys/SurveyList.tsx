@@ -121,13 +121,13 @@ export default function SurveysList({ environmentId }) {
     );
   }
   
-  const copySurveyToOtherEnvironment = async (environmentType: "production" | "development") => {
+  const copySurveyToOtherEnvironment = async (environmentType: "production" | "development",surveyId) => {
     try {
       const newEnvironment = environment?.product.environments.find((e) => e.type === environmentType);
       
       if (newEnvironment) {
         const newEnvironmentId = newEnvironment.id;
-        await duplicateSurvey(newEnvironmentId, activeSurveyIdx);
+        await duplicateSurvey(newEnvironmentId, surveyId);
     
         toast.success("Survey copied successfully.");
         mutateSurveys();
